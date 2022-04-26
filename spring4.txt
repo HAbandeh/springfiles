@@ -1,0 +1,98 @@
+Pet clinic started
+with creating new app in spring.io
+create the model [POJO] [owner, person, pet, vet, PetType]
+after that create two moduels
+moved thd POJO to the data module
+and the main to the web
+created BaseEntity as person, owner vet are all have the id
+column so as a refactoriing created the base entity
+
+
+After that created CurdService Interface contains the operatoins that all must implement
+now we will have
+1- map based
+2- spring data JPA
+3- JDBC
+
+for the map 
+1- create AbstractMapService that has map and some operation
+created 3 impelentations for it 
+PersonSErviceMap extends aabstract map and implements the CurdService
+
+Created index.html
+vets/index.html
+owners/index.html
+vetsController
+OwnersController
+IndexController
+
+copy some resources to the project from the old project
+
+
+pet clinic related videos
+2.23-28
+2.47-52
+2.61 services
+2.62 services [map]
+2.64 create index.html and indexController
+2.65 --> planning
+
+2.66 create vet page and controller
+2.67 create owner page and controller
+2.68
+2.80 implemnt the commandLineRunner
+2.81 add @service to the services and DI to the loader
+2.82 list owners
+2.83 list of vets
+2.84 auto generate map IDs
+2.85 conclusion
+
+2.111 copy resources to the folder from the original project
+2.112 copy html files from the original project
+2.113 imple;ment web resource optimizer --> changes to pom.xml to generate css from less files
+2.114 apply mastter layout template to index page
+2.115 localization
+2.116 master template to owners page
+2.117 master template to vets page
+2.118 project planning
+2.119 create visit entities
+2.120 create Speciality
+2.121 address items to owner class
+2.122 Create pet type map service
+2.123 Pet type data on startup
+2.124 Enhance owners entity upon saving the owner we check if the pet and pet type are saved !
+2.125 Create SpecialityMapService 
+2.126 add specialities to vets on startup
+2.127Broken links
+
+2.146 Create base entity
+2.147
+2.148
+2.149
+2.150
+2.151
+2.152
+2.153
+2.154
+2.155
+2.156
+2.157
+2.158
+2.159 using profiles
+2.160
+
+
+2.213
+2.214
+2.215
+2.216
+2.217
+2.218
+2.219
+2.220
+2.221
+2.222
+2.223
+
+
+

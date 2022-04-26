@@ -1,0 +1,28 @@
+Recipe project
+2.131-2.144
+
+2.171
+
+192-208
+
+
+------------------
+section 1 --> done
+section 2 --> done
+section 3 --> done
+section 4 --> done
+section 5 --> done
+section 6 --> done
+section 7 --> done
+section 8 --> done
+section 9 --> done
+section 11--> done ???
+section 12
+section 16 --> done ignore !
+section 17 --> done ignore !
+section 18 --> done
+section 23
+section 24
+section 25
+section 
+

@@ -1,0 +1,1213 @@
+
+------------------
+should be checked
+What is binding result
+what is model attribute
+
+------------------
+
+Spring boot is a wrapper on spring framework
+To tell the spring it is bean to be collected during the component scan(will be injected)
+
+Hibernate is implementation of jpa
+jpa is standard of the way to manage the relation between
+java objects and relational database [Java persistance API]
+
+thymeleaf
+th:text="${recipe.note}"
+th:text="#{welcome}"
+<td> <a th:href="@{'/recipe/show' + ${recipe.id}}" >View</a></td>
+th:field="*{prepTime}"
+th:field="*{description}"
+
+<div th:if="${#fields.hasEErrors('*')}"
+
+1.1:ignore
+1.2: ignore
+1.3: ignore
+1.4: jdk1.8, maven 3.2.5, Gradle 3.4.1
+java -version
+javac -version
+mvn -v
+gradle -v
+1.5: ignore
+1.6: free account
+1.7:ignore
+1.8:ignore
+1.9:ignore
+
+2.10: ignore
+2.11: spring initialer (instead of building from scratch
+and find the related libraries to build the project)
+start.spring.io
+add the following:
+spring web (mvc)
+spring data jpa
+h2 database (in memory database)
+
+2.12: open the project from intellij (from the extracted)
+
+
+2.14: 
+JPA: JAVA PERSESTANCE API
+POJO: plain old java object --> class with private members and setters and getters
+pojos usually in domain or model packages
+JPA requires zero arg constructors
+@Entity
+public class Book {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+    private Set<Author> authors;
+
+.@Entity
+public class Author {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+
+    @ManyToMany(mappedBy = "authors")
+    private Set<Book> books;
+
+--------------------------------------
+2.16: create reporsitory for each entity
+In package called repostiroy
+public interface AuthorRepository extends CrudRepository<Author, Long> {
+
+2.17: create bootstrap package 
+
+@Component
+public class BootStrapData implements CommandLineRunner {
+
+        Author a1 = new Author("Hashem", "Abandeh");
+        Book b1 = new Book("Computer", "123");
+        a1.getBooks().add(b1);
+        b1.getAuthors().add(a1);
+
+        authoRepo.save(a1);
+
+--------------
+2.18: 
+@OneToMany
+@JoinColumn(name = "publisher_id")
+
+@ManyToOne
+
+2.19:
+h2 >> in memory database
+http://localhost:8080/h2-console
+
+--------------
+
+2.20:
+MVC (Model, View, Controller)
+
+2.21:
+@Controller
+public class BookController {
+
+    BookRepository bookRepo;
+
+    public BookController(BookRepository bookRepo) {
+        this.bookRepo = bookRepo;
+    }
+
+    @RequestMapping("/books")
+    public String getBooks(Model model){
+
+        model.addAttribute("books", bookRepo.findAll());
+        return "books";
+    }
+}
+
+--------------------------
+2.22:
+Thymeleaf: java template engine(natural template engine) --> you can view templates in your browser
+add the dependency to pom.xml
+create tempate list.html
+now the cotroller should return to the correct model example return "books/list"
+
+<p th:text="${joke}">
+  <tr th:each="book : ${books}">
+    <td th:text="${book.id}">123</td>
+
+--------------------------
+
+2.23:talking about the pet clinic app
+2.24:talking about the pet clinic app
+2.25:talking about the pet clinic app
+
+2.26: watch
+2.27:watch
+-------------
+
+2.30:
+SOLID
+The Single Responsibility Principle: each class to have single responsibility
+The Open-Closed Principle:  open for extension and closed to modification.[Modification means changing the code of an existing class, and extension means adding new functionality.]
+you should be able to extend class behavior without modifying it
+
+The Liskov Substitution Principle objects should be replaceable 
+with instance of their subtypes without altering the correction of projgram
+
+
+The Interface Segregation Principle [Segregation means keeping things separated, and the Interface Segregation Principle is about separating the interfaces.]
+The Dependency Inversion Principle [different than dependecy injection[ abstraction should not depend upon details
+while details should depend upon abstraction]
+
+-------------
+2.31: creating new project for the dependency injection
+
+-------------
+2.32:
+ApplicationContext xtx = SpringApplication.run(SpringappApplication.class, args);
+
+MyController myController = (MyController) xtx.getBean("myController");
+myController.sayHello();
+-------------
+2.33:talking about dependency ijection
+
+[to decide which service to inject in case of multi implementations
+then you have to use primary/profile/qualifier name annotations]
+
+
+2.34: DI without spring:
+ If we have Interface [GreetingService] and implementation [GreetingSErviceImple]
+and we have another class that want to use the impl then instead of creating the object
+in this class we can inject the object using one of the following ways
+
+a- propertyInjectedController
+b- SetterInjectController
+c- ConstuructorInjectedController
+
+---------------------------------------
+2.35
+same example but using spring
+For the property
+the GreetingSErviceImpl should be @service
+the PoropertyInjectedController should be @Contorller
+the instnac should be @autoWired
+
+For the setter add @autoWired before the setter method
+
+for the consturcotr add @autoWired before the consturcotr[optional]
+
+@service to tell spring this is amanaged component
+---------------------------------------
+2.36
+if we have different implementations then we have to tell which one is expected
+using the @Qualifier annotation when having the consturctor/setter/property
+@Qualifier("SetterGreetingServiceImple")GreetingSErvice g
+
+---------------------------------------
+2.37:
+if yoou have an implementation that you want to be primary [even if you didn't use
+the @qualifier ] you have to add @Primary @service on the service class
+
+---------------------------------------
+2.38
+profile to have beans on your configurations that will take different characterstics
+---------------------------------------
+
+2.38 if we have two service with same @service
+and you don't want to add @Qualifer to the controller because it depends on the configurations
+to decide which service to inject for example prodservice vs test serveice
+you can add @profile("en")
+to the service and inside the props file define the active profile
+---------------------------------------
+2.39 default profile if there is no active in the props
+@Profile({"EN", "defaul"}) 
+
+---------------------------------------
+2.40 ??? spring bean life cycle [ignore]
+
+---------------------------------------
+2.41 ??? spring bean life cycle [ignore]
+
+---------------------------------------
+2.42 revision
+IoC: Inversion of control: the runtime environemnt or framework which
+injects dependecies
+
+---------------------------------------
+2.43 Open Closed principle
+
+---------------------------------------
+
+2.44 Interface Segregation
+
+
+---------------------------------------
+
+2.45: Dependency Inversion Principle
+
+---------------------------------------
+
+2.46 interface naming
+if it is only one implementation then you can use the "interfaceName" + "Impl"
+ keyword otherwise don't use it
+
+
+---------------------------------------
+2.48 create new module
+Create module for the data
+and module for the web
+
+in this video we created two maven modules one for the data and the other for
+web and moved the classes to them where the main is inside the web
+and deleted the old src folder
+
+  <spring-boot.repackage.skip>true</spring-boot.repackage.skip>
+---------------------------------------
+2.49 maven release plugin !!
+ignore??
+---------------------------------------
+2.50: 
+create services for owner vet and pet
+---------------------------------------
+2.51
+BaseEntity is a JPA concept [ common columns e.x id]s
+---------------------------------------
+2.52 summary
+---------------------------------------
+2.53 - 2.59 jokes app [IMPORTANT]
+new project with spring web dependecny
+new controller
+new service that is injected in the controller
+    @RequestMapping("/")
+    public String getJoke(Model model){
+
+        model.addAttribute("joke", jokesService.getJoke());
+        return  "index";
+    }
+
+inside index.html
+<body>
+<h1>Jokes</h1>
+<p th:text="${joke}"> show Hoke Here..</p>
+</body>
+---------------------------------------
+2.60 custom banner [ignore]
+banner.txt inside the resources fodler and paste the text
+that will appear in the banner (log)
+---------------------------------------
+2.61 refactore the pet clinic services by creating new interface
+with generics
+---------------------------------------
+2.62
+for the services we will have 3 different implementations
+map
+spring data jpa 
+jdbc
+and control using profiles.
+
+create new folder
+Create abstract class AbstractMapSErvice<T, ID>
+create there implementations 
+
+[OwnerService, VetSErvice,PetSErvice] --> have common so created generic CurdService
+now we will have to implement the above interfaces
+OwnersMapService, VetMapService, PetMapService --> have common so created AbstractMapService
+
+later we will have different implementations
+
+
+
+---------------------------------------
+2.63 ignore
+
+---------------------------------------
+2.64
+create index.html
+create IndexController.java
+
+---------------------------------------
+2.65 pet clinic project planning 
+
+---------------------------------------
+2.66 create vet page and controller
+---------------------------------------
+2.67 create owner page and controller
+@RequestMapping("/owners")
+@Controller
+public class OwnerController {
+
+    @RequestMapping({"", "/" ,"/index","/index.html"})
+    public String listOwners(){
+        return "owners/index";
+    }
+---------------------------------------
+2.68 summary
+---------------------------------------
+2.69 Introduction to spring boot configuration
+
+---------------------------------------
+2.70 
+
+Configuration
+1- xml --> old
+2- Java code configurations [annotations]
+4- groovy bean dsl
+
+
+@Controller, @Service, @Component, @Repository
+
+Configuration class are defined with @Configuration annotation
+---------------------------------------
+2.71
+Spring stero type: class level annotations used to define spring beans
+@Component, @Controller, @RestController, @Repository, @Service
+
+@Component: indicates that an annotated class is a component and will be created 
+as a bean
+@Controller: indicates the class is a spring mvc contoller
+@restController: extends controller and adds @REsponseBody
+@service: indicates the class is a service [stand alone]--> stateless
+
+---------------------------------------
+2.72: 
+Component scan happens inside the main class package
+and if there is another class outside the main class package
+then you have to add the following to the main
+
+@ComponentScan(basePackages = {"guru.springframework.sfgdi","com.cobra.secondarypackage"})
+---------------------------------------
+2.73 creat the configuration class and remove the service from ConstructorGreetingService 
+
+
+@Configuration
+public class GreetingServiceConfig {
+
+    @Bean
+    ConstructorGreetingService constructorGreetingService(){
+        return new ConstructorGreetingService();
+    }
+}
+---------------------------------------
+2.74
+    @Primary
+    @Bean
+    PrimaryGreetingService primaryGreetingService(){
+        return new PrimaryGreetingService();
+    }
+
+    @Profile("EN")
+    @Bean
+    I18nEnglishGreetingService i18nService(){// in the class this was @Service("i18nService")
+        return new I18nEnglishGreetingService();
+    }
+
+    @Profile({"ES", "default"})
+    @Bean("i18nService")
+    I18NSpanishService I18NSpanishService(){// to avoid duplicate with the english above we set the name in the bean
+        return new I18NSpanishService();
+    }
+---------------------------------------
+2.75 create new bean that will be injected to the 
+    @Profile("EN")
+    @Bean
+    I18nEnglishGreetingService i18nService(){// in the class this was @Service("i18nService")
+        return new I18nEnglishGreetingService();
+    }
+
+as below
+
+    @Bean
+    EnglishGreeetingsRepository englishGreeetingsRepository(){
+        return new EnglishGreetingRepositoryImple();
+    }
+    @Profile("EN")
+    @Bean
+    I18nEnglishGreetingService i18nService(EnglishGreeetingsRepository englishGreeetingsRepository){// in the class this was @Service("i18nService")
+        return new I18nEnglishGreetingService(englishGreeetingsRepository);
+    }
+---------------------------------------
+2.76
+PetService [ DogPetService, CatPetService]
+
+created new factory PetServiceFactory
+
+ublic class PetServiceFactory {
+
+    public PetService getPetService(String type){
+
+        switch(type){
+
+            case "dog":
+                return new DogPetService();
+
+            case "cat":
+                return new CatPetService();
+            default :
+                return new DogPetService();
+        }
+    }
+}
+
+
+and inside the config
+    @Bean
+    PetServiceFactory petServiceFactory(){
+        return new PetServiceFactory();
+    }
+
+    @Profile({"dog", "default"})
+    @Bean
+    PetService dogPetService(){
+        return petServiceFactory().getPetService("dog");
+    }
+
+
+    @Profile("cat")
+    @Bean
+    PetService catPetService(){
+        return petServiceFactory().getPetService("dog");
+    }
+---------------------------------------
+2.77 spring xml configurations
+ignore as not much used now adays
+
+@ImportResource("sfgdi-config.xml")
+---------------------------------------
+2.78 ignore
+spring scope [ not that used as usually they are stateless]
+
+singelton --> default
+Prototype: new instance each time
+Request: instance per request
+SEssion: instnace per session
+global session: instance per global sesison
+application scope:
+websocet:
+Custom scope
+@Scope to define the bean scope (singelton, session, request, application ...etc)
+---------------------------------------
+2.79 ignore
+spring scopes by example
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+
+Create class with name SingeltonBean and annotation @Component
+Create class with name PrototypeBean and annotation @Compoenent and @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+ctx.getBean(SingeltonBean.class) --> will not invoke the consturcutor if you call
+multiple times
+ctx.getBean(PrototypeBean.class) --> will call the constructor each time
+you call this line
+---------------------------------------
+2.80
+Create new class implements CommandLineRunner
+inside this class created owners and vets
+
+and used the OwnerService --> map implementation to save
+and the same for the vetSErvice
+
+[]
+
+---------------------------------------
+2.81 add @Service to all implementations and DI in the loader
+
+---------------------------------------
+2.82 display owners
+
+    @RequestMapping({"", "/" ,"/index","/index.html"})
+    public String listOwners(Model model){
+
+        model.addAttribute("owners", ownerService.findAll());
+
+        return "owners/index";
+    }
+
+    <tr th:each="owner : ${owners}">
+        <td th:text="${owner?.id}">123</td>
+        <td th:text="${owner?.firstName}">123</td>
+        <td th:text="${owner?.lastName}">123</td>
+    </tr>
+---------------------------------------
+2.83 display vets [contorller that has service injected and add attribute to the model
+and display in thymleaf
+---------------------------------------
+2.84 auto generate IDs
+---------------------------------------
+2.86 introduction for external properties [important]
+---------------------------------------
+2.87 to avoid recompile !
+using properties files or YAML or system variables .. etc --> there is priority
+
+application.properties
+profileSpecific.properties
+spring cloud config to get configuration from configuration server --> microservices course
+
+---------------------------------------
+2.88  create new package [datasrouce and class FakeDataSrouce.java with 
+username, password and url)
+
+in the config add this @PropertySource("classpath:datasource.properties")
+
+and configure the bean as the following
+
+  @Bean
+    FakeDataSrouce fakeDataSrouce(@Value("${cobra.username}") String userName,
+                                  @Value("${cobra.password}") String password,
+                                  @Value("${cobra.jdbcurl}") String jdbcURL){
+        FakeDataSrouce fakeDataSrouce = new FakeDataSrouce();
+        fakeDataSrouce.setUserName(userName);
+        fakeDataSrouce.setPassword(password);
+        fakeDataSrouce.setJdbcURL(jdbcURL);
+        return fakeDataSrouce;
+    }
+---------------------------------------
+2.89 ignore ??
+
+override the props using system variables
+using Intellij edit configurations
+--guru.username=userfromCMD
+
+---------------------------------------
+2.90 use application.properties instead of the external file (remove @PropertySource
+from the config class)
+---------------------------------------
+2.91
+create application-dev.properties, application-qa.properties
+and in the application.properties add spring.profile.active=dog,EN,dev
+change the active profile will lead to load the correct version of the file
+
+application-{PROFILENAME}.properties --> spring name convension
+---------------------------------------
+2.92 application.yml
+
+spring:
+  profile:
+    active: dog,EN,qa
+
+guru:
+  username:
+  password:
+---------------------------------------
+2.93 profile related yaml properties
+---------------------------------------
+2.94 multiple profiles in one YAML file using the sepearator ---
+---------------------------------------
+2.95 properties binding ---> props directly mapped with instance variables
+Create new class
+@Configuration
+@ConfigurationProperties("guru")
+---------------------------------------
+2.96 constructor properties binding
+@Configuration
+@ConstructorBinding
+@ConfigurationProperties("guru")
+
+also use this in the config java class
+@EnableConfigurationProperties
+---------------------------------------
+2.97 
+MVC
+---------------------------------------
+2.98 assignment
+---------------------------------------
+2.99 create new project from spring web site 
+---------------------------------------
+2.100
+Thymeleaf is java template engine produce xml, xhtml, HTML5
+replacement to JSPs
+
+Thymeleaf can be viewed in browser not like JSPs
+---------------------------------------
+2.101 create new index.html 
+and controller.IndexController
+---------------------------------------
+2.102 ignore???
+HTTP: Hypertext transfer protocol
+
+---------------------------------------
+2.103 ignore???
+HTTP Request Methods
+Get: request a resource[html file, file, image ..etc] --> idempotent (SAFE)
+Head: request for meta data without body
+POST: Post data to server (create) --> NOT idempotent 
+PUT: create or update
+DELETE: request to delete resource
+OPTIONS: returns the http methods supported
+
+Safe methods: methods that don't do a change on the server(retrieve data only)
+
+idempotent - can be executed multiple times without issues
+
+500" SERVER ERRORS
+200 SUCCESSFUL
+300 REDIRECTIONS
+400 CLIENT ERROR
+100 INFORMATION
+---------------------------------------
+2.104 ignore???
+Chrome dev tools 
+---------------------------------------
+2.105 ignore???
+firefox firebug tool
+---------------------------------------
+2.106 ignore???
+firefox developer edition
+---------------------------------------
+2.107 ignore???
+safari browser
+---------------------------------------
+2.108 ignore???
+Axis TCPMon --> use 8081 and map it with 8080
+---------------------------------------
+2.109 ignore???
+Spring boot development tools --> tools to speed up the process
+
+---------------------------------------
+2.110 ignore???
+Intellij compiler configurations --> change the configurations 
+to build on save not only when build project
+---------------------------------------
+2.111 COPY FILES TO STATIC FOLDER (IMAGES AND FONTS)
+---------------------------------------
+2.112 copy html files from the origional project
+---------------------------------------
+2.113  implement web resource optimizer
+copy pom.xml changes
+WRO plugin????
+maven pacakge to generate css from less files
+and remember to add the plugin to pom.xml
+---------------------------------------
+2.114 apply mastter layout template to index page
+
+---------------------------------------
+2.115 localization
+create messagess folder inside resources
+and create messages.properties , messages_fr.properties
+and in the html
+th:text="#{welcome}"
+spring.web.locale=fr
+spring.messages.basename=messages/messages
+---------------------------------------
+2.116 apply master templates to owners page
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'home')} ">
+---------------------------------------
+2.117 apply master template to vet page
+<html lang="en"  xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body},'home')} ">
+---------------------------------------
+2.118 project planning
+---------------------------------------
+2.119 create visit entities
+---------------------------------------
+2.120 create Speciality
+---------------------------------------
+2.121 address items to owner class
+---------------------------------------
+2.122 Create pet type map service
+---------------------------------------
+2.123 Pet type data on startup
+---------------------------------------
+2.124 Enhance owners entity upon saving the owner
+we check if the pet and pet type are saved !
+---------------------------------------
+2.125 Create SpecialityMapService 
+---------------------------------------
+2.126 add specialities to vets on startup
+---------------------------------------
+2.127Broken links
+---------------------------------------
+2.128 summary
+---------------------------------------
+2.129
+---------------------------------------
+THE JPA SECTION IS VERY IMPORTANT
+---------------------------------------
+2.130
+@OneToOne --> Eager
+@OneToMony --> Lazy
+@ManyToMany--> Lazy
+@ManyToOne --> Eager
+
+database table is not created for the super class
+each sub class has its own table
+
+JPA supports @preUpdate, @PrePersist for audit timestamps
+Hibernate provides @CreationTimeStamap, @UpdateTimeStamp
+---------------------------------------
+2.131
+Recipe data model
+---------------------------------------
+2.132 forking from github + some talk about github
+---------------------------------------
+2.133 one to one relation [important]
+@OneToOne(cascade = CascadeType.ALL)
+@Entity
+
+ @Id
+ @GeneratedValue(strategy = GenerationType.IDENTITY)
+---------------------------------------
+2.134 One to Many relation [important]
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
+---------------------------------------
+2.135 2.136 assignment
+---------------------------------------
+2.137 enum
+    @Enumerated(value = EnumType.STRING)//
+    private Difficulty difficulty;
+---------------------------------------
+2.138 @ManyToMany --> will create join table so we have to tell 
+that we want only one join table using the mapped by
+also we have to tell the name of the join table and the columns
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category", joinColumns=
+            @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name="category_id"))
+    private Set<Category> categories;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<Recipe> recipes;
+---------------------------------------
+2.139 Repository
+public interface RecipeRepo extends CrudRepository<Recipe, Long> {
+---------------------------------------
+2.140 database initialization with spring
+
+data can be loaded from import.sql (or by code) --> executed if ddl-auto is set to create or creat update
+schema-${platform}.sql
+data-${platform}.sql
+
+
+---------------------------------------
+2.141 spring data jpa query methods
+Optional<Category> findByDescription(String description); !!!!!
+---------------------------------------
+2.142 assignment
+---------------------------------------
+2.143 assignment
+---------------------------------------
+2.144 Using Setters for JPA bidirectional realtions
+recipe.setNotes(notes)
+notes.setREcipe(recipe)
+
+instead inside the setNotes method set the recipe on the notes object
+---------------------------------------
+2.145 10 seconds questions
+
+there is no default cascade type
+cascade types: all, remove, dtach, refresh, merge, persist
+-----------------------------------
+2.146 Create base entity
+@MappedSuperclass =->> don't map this to databse
+---------------------------------------
+2.147 convert owners to jpa entity
+
+    @Column(name="first_name")
+    private String firstName;
+
+@Entity
+@Table(name="owners")
+
+    @ManyToOne
+    @JoinColumn(name="owner_id")
+---------------------------------------
+2.148 Convert Vet entity
+
+    @ManyToMany(fetch= FetchType.EAGER)
+    @JoinTable(name="vet_specialties", joinColumns = @JoinColumn(name="vet_id"),
+    inverseJoinColumns = @JoinColumn(name="speciality_id"))
+    private Set<Speciality> specialitySet = new HashSet<>();
+
+---------------------------------------
+2.149 Create visit entity
+---------------------------------------
+2.150 spring data jpa repos
+---------------------------------------
+2.151 spring data jpa owner service
+---------------------------------------
+2.152  spring data jpa vet service
+---------------------------------------
+2.153 spring data jpa pet type service
+---------------------------------------
+2.154 spring data jpa pet service
+---------------------------------------
+2.155 spring data jpa speciality service
+---------------------------------------
+2.156 task planning ignore !!!
+---------------------------------------
+2.157 visit map based service
+---------------------------------------
+2.158 spring data jpa visit service
+---------------------------------------
+2.159 new profile to decide map vs spring data jpa
+---------------------------------------
+2.161 lombok
+---------------------------------------
+2.162 lombok
+make sure to enable annotation processing under compiler settings
+@NonNull
+@Cleanup
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode
+@NoArgsConstructor
+@RequiredArgsConstructor =---> all final an dNon null 
+@AllArgsConstructor
+@Data --> everything needed for POJOs
+
+@Synchronized: safer implementation for java synchronized
+@Builder --> implements builder pattern
+
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+		</dependency>
+---------------------------------------
+2.163 lombok
+---------------------------------------
+2.164 lombok
+---------------------------------------
+2.165 lombok
+---------------------------------------
+2.166 lombok
+---------------------------------------
+2.167 
+@EqualsAndHashCode(exclude={"recipes"}) --> to avoid stack overflow
+---------------------------------------
+2.168 lombok
+---------------------------------------
+2.169 lombok ignore
+---------------------------------------
+2.171-- adding bootstrap
+the following is not deployed
+<tr th:remove="all">
+  <td th:text="${recipe.id}">12333</td>
+  <td th:text="${recipe.description}">Tasty Goodnees 2</td>
+</tr>
+---------------------------------------
+2.192 --> introduction
+CRUD: Create/ Read/ Update/ Delete
+---------------------------------------
+2.193 webjars (bootstrap and jquery)
+---------------------------------------
+2.194 Display a recipe by ID
+<td> <a th:href="@{'/recipe/show' + ${recipe.id}}" >View</a></td>
+
+    @RequestMapping("/show/{id}")
+    public String showById(@PathVariable String id, Model model){
+
+        model.addAttribute("recipe", this.recipeService.findById(Long.valueOf(id)));
+        return "recipe/show";
+    }
+
+---------------------------------------
+2.195
+2.196 assignment
+
+---------------------------------------
+2.197: processing form post with spring ignore ???
+---------------------------------------
+2.198 creating command object
+command package
+converters package 
+ReecipeCommandToRecipe 
+RecipeToRecipeCommand
+
+@Component
+public class CategoryToCategoryCommand implements Converter<Category, CategoryCommand> {
+---------------------------------------
+2.199 Create a recipe
+
+    @RequestMapping("/new")
+    public String newRecipe(Model model){
+
+        model.addAttribute("recipe", new RecipeCommand());
+        return "recipe/recipeform";
+    }
+
+    @PostMapping
+    @RequestMapping("")
+    public String saveOrUpdate(@ModelAttribute RecipeCommand recipeCommand) {
+        RecipeCommand savedCommand = this.recipeService.saveCommand(recipeCommand);
+// inside the save command we have to convert to recipe and then save and the convert back to command
+        return "redirect:/recipe/show/" + savedCommand.getId();
+    }
+
+---------------------------------------
+2.200n Update a recipe
+
+    @RequestMapping("/{id}/update")
+    public String updateRecipe(@PathVariable String id, Model model){
+
+        RecipeCommand command = this.recipeService.findCommandById(id);
+        model.addAttribute("recipe", command);
+        return "recipe/recipeform";
+    }
+---------------------------------------
+2.201 Delete a recipe
+    @RequestMapping("/{id}/delete")
+    public String deleteById(@PathVariable String id, Model model) {
+        this.recipeService.deleteRecipeById(Long.valueOf(id));
+        return "redirect:/";
+    }
+
+---------------------------------------
+2.202 view ingredients
+---------------------------------------
+2.203 show ingredients
+---------------------------------------
+2.204 update ingredients
+---------------------------------------
+2.205 create ingredients
+---------------------------------------
+2.206 delete ingredients
+---------------------------------------
+2.207 assignment
+---------------------------------------
+2.208 Enum drop downs
+
+<select>
+    <option th:each="diffValue: ${T(com.cobra.recipeapp.model.Difficulty).values()}"
+    th:value="${diffValue.name()}" th:text="${diffValue.name()}"></option>
+</select>
+---------------------------------------
+2.209 using debugger
+@RequestParam
+---------------------------------------
+2.210 upload images with spring MVC ignore ????
+---------------------------------------
+2.211 Persiting images to database ignore ????
+---------------------------------------
+2.212 displaying image from databse ignore ????
+---------------------------------------
+2.213 Display owner records
+Model vs ModelandView
+---------------------------------------
+2.214 Github Branch ignore ???
+---------------------------------------
+2.215 web data binder
+@InitBinder --> security purposes
+public  void setAllowedFields(WebDataBinder dataBinder) {
+databinder.setDisallowedFields("id")
+}
+
+----------------- ----------------------
+2.216 implement find owner !
+---------------------------------------
+2.217 fixiing issue
+---------------------------------------
+2.218 update or create owner
+---------------------------------------
+2.219 model attributes
+---------------------------------------
+2.220 create or update pet
+---------------------------------------
+2.221 fixing bug
+---------------------------------------
+2.222 create or update visit
+---------------------------------------
+2.223 task planning ignore
+---------------------------------------
+2.224 conclusion
+---------------------------------------
+2.225 introduction to validations and constraints and localization
+---------------------------------------
+2.226 overview of exception handling
+404 resource not found
+401 unauthorized
+405 method not allowed
+
+@ResponseStatus to annotate a custom exception classes indicating the http status
+you want to erturn upon excpetion
+
+@ExceptionHandler to define the exxception ahanlding ( on controllers)
+
+HandlerExceptionResolver --> interface that you can implement [ in spring there is 3 implementaions]
+
+if just setting http status --> @ResponseStatus
+if redirect to view use SimpleMappingExceptionResolver
+
+
+---------------------------------------
+2.227
+using @ResponseStatus
+@ResponseStatus(HttpStatus.NOT_FOUND)
+public class NotFoundException extends RuntimeException{
+---------------------------------------
+2.228 + 2.229 spring mvc exception handler
+
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND) // without this the code will make the response 200
+    public ModelAndView handleNotFound(Exception e){
+
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("404notfound");// Inside template folder
+        modelAndView.addObject("exception", e);
+        return modelAndView;
+    }
+
+---------------------------------------
+2.229 showing error data on 404 error page
+---------------------------------------
+2.230 - 2.231 --> number format excption
+---------------------------------------
+2.232 spring mvc controller advice
+
+move common exceptions to another class
+
+@ControllerAdvice
+public class ControllerExceptionHandler {
+
+---------------------------------------
+2.233 Data validation with JSR 303
+@Null
+@NotNull
+@Negative
+@Size
+@PositiveOrZero
+@Positive
+@Past
+@Pattern
+@Future
+@Email
+@NotEmpty
+@Currency
+@CreditCardNumber
+@Length
+@URL
+@Range
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+---------------------------------------
+2.234 data validation with sprinv mvc
+---------------------------------------
+2.235 validations on thymeleaf
+
+<div th:if="${#fields.hasEErrors('*')}"
+
+th:each="err: $#fields.errors('description')}"
+
+so the mapped fields will show errors directly
+
+    <label th:text="#{recipe.description}">Recipe Description d:</label>
+      <input type="text" class="form-control" th:field="*{description}" th:errorclass="has-error"/>
+     <span class="help-block" th:if="${#fields.hasErrors('description')}">
+         <ul>
+          <li th:each="err : ${#fields.errors('description')}" th:text="${err}"/>
+ </ul>
+---------------------------------------
+2.236 Customize error messages with message source
+code.objectName.fieldName
+code.fieldName
+code
+code.fieldType
+NotBlank.recipe.descirption=asdfasdf
+
+    <label th:text="#{recipe.description}">Recipe Description d:</label>
+      <input type="text" class="form-control" th:field="*{description}" th:errorclass="has-error"/>
+     <span class="help-block" th:if="${#fields.hasErrors('description')}">
+         <ul>
+          <li th:each="err : ${#fields.errors('description')}" th:text="${err}"/>
+ </ul>
+
+---------------------------------------
+2.237 introduction to internationalization
+messages_en_us.properties
+messages_en_gb.properties
+then
+messages_en.properties
+then
+messages.properties
+---------------------------------------
+2.238 internationalization with spring
+---------------------------------------
+2.239 ci build error ignore ????
+---------------------------------------
+2.240 upgrade to java 11 ignore ???
+---------------------------------------
+2.241 test contributions ignore ???
+---------------------------------------
+2.242 visit controller tests
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+2.284 - 2.295 installing mysql ignore ???
+---------------------------------------
+2.296 - 2.303 connecting to mysql ignore ???
+---------------------------------------
+2.304 introduction ignore ????
+---------------------------------------
+2.305 mysql history ignore ????
+---------------------------------------
+2.306 Revision on the recipe project
+---------------------------------------
+2.307 assignment
+---------------------------------------
+2.308 configure mysql to be used (create database and users)
+---------------------------------------
+2.309 circle CI Ignore ???
+---------------------------------------
+2.310 code coverage ignore???
+---------------------------------------
+2.311 spring boot configuration for mysql
+
+<!-- mysql driver dependency -->
+<groupid>mysql</groupid>
+<artifcatid>mysql-connector-java</artifcatid>
+
+spring.datasource.url=123
+spring.datasource.username=asdf
+spring.datasource.password=231
+spring.datasource.platform=mysql
+
+spring.jpa.hibernate.ddl-auto=validate --- in h2 database it is create drop
+spring.jpa.database=mysql
+spring.jpa.show-sql=true
+spring.jpa.database-platform=org.hibernate.dialect.MySQLInnoDBBDialect
+---------------------------------------
+2.312
+
+new configurations to create tables ( create script)
+where this configuration points to a file that will contain the ddl
+
+---------------------------------------
+2.313 refactor ddatabase initialization for mysqla
+application-default.properties
+spring.datasource.platform=h2
+
+rename data.sql
+to data-h2.sql
+
+use profiles for the dataloader so if the profile is not the active one
+then this loader will not be run
+
+---------------------------------------
+2.314
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+---------------------------------------
+
+
+

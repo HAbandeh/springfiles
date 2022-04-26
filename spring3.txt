@@ -1,0 +1,123 @@
+@Entity
+@Component
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+
+    @ManyToMany
+    @JoinTable(name = "author_book", joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id"))
+
+ @ManyToMany(mappedBy = "authors")
+
+@Component
+
+@Controller
+
+@autoWired to indicate you want dependency injected[befoer setter, property
+and before constuctor]
+it is option to add before constructor [Dependency Injection]
+
+@Qualifier: to specify a bean name you want to inject[multiple impelemntations]
+to decide which implemntation of the interface to inject 
+in you DI class
+
+@Primary: if you have different implementation of interface and you want to mark one of them
+as primary so that if there is no qualifier then the DI will work.
+
+@Service("serviceName")
+
+@Profile("EN") =---->to sprify bean you want to inject
+based on active profile, if you have two services one for prod and the other for test
+then you can define profile for each one and in teh props define the active profile
+
+@Profile({"EN", "defaul"}) 
+
+@PostConstrcut
+@PreDestory
+
+
+<p th:text="${joke}">
+  <tr th:each="book : ${books}">
+    <td th:text="${book.id}">123</td>
+
+
+
+@Repository
+
+
+@Bean --> methods returning spring beans
+@Configuration --> configuration classes
+
+@ComponentScan(basePackages = {"guru.springframework.sfgdi","com.cobra.secondarypackage"})
+tell the main class where to scan for sterotypes
+
+@ImportResource("classpath:sfgdi-config.xml") --> to tell there is xml configuration
+
+@Scope to define the bean scope (singelton, session, request, application ...etc)
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+
+
+@PropertySource("classpath:datasource.properties") --> in the config class
+
+Create new class
+@Configuration
+@ConfigurationProperties("guru") --> to bind props with this prefix to bean class
+
+@Configuration
+@ConstructorBinding
+@ConfigurationProperties("guru")
+
+@EnableConfigurationProperties(SFGConstructorConfig)
+
+JPA supports @preUpdate, @PrePersist for audit timestamps
+Hibernate provides @CreationTimeStamap, @UpdateTimeStamp
+
+ @Lob =---> Byte[]
+
+@OneToOne(cascade = CascadeType.ALL)
+@Entity
+
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+@OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe") --> cascade means deleting this will delete the others realted
+private Set<Ingredient> ingredients;
+
+@Enumerated(value = EnumType.STRING)//
+private Difficulty difficulty;
+
+    @ManyToMany
+    @JoinTable(name = "recipe_category", joinColumns=
+            @JoinColumn(name = "recipe_id"),
+            inverseJoinColumns = @JoinColumn(name="category_id"))
+    private Set<Category> categories;
+
+    @ManyToMany(mappedBy = "categories")
+    private Set<Recipe> recipes;
+
+
+@MappedSuperclass =->> don't map this to databse
+
+@Column(name="first_name")// there is a default for this
+private String firstName;
+
+@Entity
+@Table(name="owners")
+
+@ManyToOne
+@JoinColumn(name="owner_id")
+
+
+@PathVariable
+
+@PostMapping
+@GetMapping
+@ModelAttribute --> to tell spring to bind the form fields intot he command object
+
+
+@ResponseStatus to annotate a custom exception classes indicating the http status
+you want to erturn upon excpetion
+
+@ExceptionHandler to define the exxception handling view( on controllers)
+
+@ControllerAdvice
