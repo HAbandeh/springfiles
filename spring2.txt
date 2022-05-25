@@ -1209,5 +1209,70 @@ then this loader will not be run
 ---------------------------------------
 ---------------------------------------
 
+362: SOAP you are calling a method and passing an xml body to it
+while in REST you are constructing a url.
+
+363:Guide to rest
+Representational state transfer
+Representational (xml or json)
+state transfer (via HTTP)
+URI: Uniform Resource Identifier --> unique string identifying a resource
+URL: Uniform Resource Locator (uri with network information)
+PUT: insert or update so it is Idempotent
+
+364:Richardson Maturity Model (model to describe the maturity of restfule services)
+
+365: postman https://apifaketory.docs.apiary.io/
+
+366: Spring use Jackson to bind JSON to java POJOs
+
+367: assignment
+
+368: Introduction to spring RestTemplate
+config class with @Configuraiton annotation
+@Bean
+public RestTempate restTemplate(RestTemplateBuilder builder){
+reutrnn builder.build
+}
+
+UserData userData = restTemplate.getForObject(url)
+
+369:
+ServerWebExchange
+serverWebExchange.getFormData().block()
+    @PostMapping("/users")
+    public String formPost(Model model, ServerWebExchange serverWebExchange){
+
+        MultiValueMap<String, String> map = serverWebExchange.getFormData().block();
+
+        Integer limit = new Integer(map.get("limit").get(0));
+
+
+370:
+    public ApiServiceImpl(RestTemplate restTemplate, @Value("${api.url}") String api_url) {
+        this.restTemplate = restTemplate;
+        this.api_url = api_url;
+    }
+
+    @Override
+    public List<User> getUsers(Integer limit) {
+
+        UriComponentsBuilder uriBuilder = UriComponentsBuilder
+                .fromUriString(api_url)
+                .queryParam("limit", limit);
+
+        UserData userData = restTemplate.getForObject(uriBuilder.toUriString(), UserData.class);
+        return userData.getData();
+    }
+
+http://apifaketory.com/api/user?limit=
+http://apifaketory.com/api/user?limit=3
+
+
+371: 
+Rest template example
+
+372: going reactive with spring web client
+
 
 
